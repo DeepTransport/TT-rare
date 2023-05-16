@@ -1,5 +1,5 @@
 # TT-Rare (Matlab)
-Deep Inverse Rosenblatt Transports (DIRT) + MCMC sampling using Tensor Train (TT) approximation for rare event simulation. This folder implements examples from the paper [T. Cui, S. Dolgov, R. Scheichl, Deep importance sampling using tensor trains with application to a priori and a posteriori rare events](https://).
+Deep Inverse Rosenblatt Transports (DIRT) + MCMC sampling using Tensor Train (TT) approximation for rare event simulation. This folder implements examples from the paper [T. Cui, S. Dolgov, R. Scheichl, Deep importance sampling using tensor trains with application to a priori and a posteriori rare events](https://arxiv.org/abs/2209.01941).
 
 ## Installation
 
@@ -21,11 +21,11 @@ All files for running experiments start with a `test_` prefix. You may click on 
 
 Each test can be run without any arguments. In this case, they will be interactively asked from the user. For batch runs, parameters can be passed in pairs of inputs ``'param_name1'``, ``param_value1``, ``'param_name2'``, ``param_value2``, and so on. For example,
 ```
-test_diffusion_rare_dirt('y0', 'b', 'log2N', 14, 'rpi', 7, 'npi', 17, 'runs', 8)
+test_sir_chain('K', 1, 'sigma_n', 1, 'Imax', 80, 'gammaev', 3e3/80, 'Nsamples', 2^14, 'runs', 1, 'npi', 17, 'rpi', 7, 'beta', 10.^(-4:1/3:0))
 ```
-will run the shock absorber test with all default parameters. Only a subset of arguments can be given, e.g.
+will run the SIR test with all default parameters. Only a subset of arguments can be given, e.g.
 ```
-test_diffusion_rare_dirt('log2N', 18, 'runs', 32)
+test_sir_chain('Nsamples', 1000, 'runs', 10)
 ```
 will take the corresponding values from the inputs, and ask the user only for the remaining parameters.
 Default parameters (corresponding to those in the paper) can be selected by entering empty input in the corresponding prompt.

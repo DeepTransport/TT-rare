@@ -35,7 +35,7 @@ end
 
 
 % number of compartments
-d = params.d; 
+d = params.K; 
 % Adjacency matrix of the diffusion
 W = spdiags(ones(d,1)*[1 -2 1], -1:1, d, d);
 W(1,d) = 1;

@@ -5,10 +5,10 @@ for i=1:2:numel(varargin)
     params.(varargin{i}) = varargin{i+1};
 end
 
-if (~isfield(params, 'd'))
-    params.d = input('Number of compartments d = ? (default 1): ');
-    if (isempty(params.d))
-        params.d = 1;
+if (~isfield(params, 'K'))
+    params.K = input('Number of compartments K = ? (default 1): ');
+    if (isempty(params.K))
+        params.K = 1;
     end
 end
 

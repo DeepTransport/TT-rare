@@ -1,7 +1,7 @@
 % DIRT SIR rare event sampling test for Austrian topology
 function test_sir_austria(varargin)
 
-varargin = [varargin, {'d', 9, 'model', 'austria'}];
+varargin = [varargin, {'K', 9, 'model', 'austria'}];
 params = parse_sir_inputs(varargin{:});
 % Extra parameters (only for DIRT)
 if (~isfield(params, 'npi'))

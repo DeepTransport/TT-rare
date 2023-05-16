@@ -14,10 +14,10 @@ cd(mydir);
 % Parse parameters or ask a user for them
 params = parse_sir_inputs(varargin{:});
 % Extra parameters (only for CE)
-if (~isfield(params, 'K'))
-    params.K = input('Number of Gaussians in the mixture K = ? (default 4): ');
-    if (isempty(params.K))
-        params.K = 4;
+if (~isfield(params, 'Ng'))
+    params.Ng = input('Number of Gaussians in the mixture Ng = ? (default 4): ');
+    if (isempty(params.Ng))
+        params.Ng = 4;
     end
 end
 if (~isfield(params, 'em_iter'))
@@ -33,7 +33,7 @@ if (~isfield(params, 'rho'))
     end
 end
 
-d = params.d; 
+d = params.K; 
 % Adjacency matrix of the diffusion
 W = spdiags(ones(d,1)*[1 -2 1], -1:1, d, d);
 W(1,d) = 1;
@@ -87,13 +87,13 @@ P_event = zeros(params.runs, 1);
 for irun=1:params.runs
     % Step 1: EM approximation for the normalising constant
     tic;
-    gm0 = gm_init(2*d, params.K, 1E-2);
+    gm0 = gm_init(2*d, params.Ng, 1E-2);
     [gm0,Z_post(irun),ess_post(irun),n_iter_post(irun)] = cross_entropy(@(u)ones(1,size(u,2)), postfun, 0, gm0, params.em_iter, params.Nsamples, params.rho);
     ttimes_post(irun) = toc;
 
     % Step 1: EM approximation for the event probability
     tic;
-    gm1 = gm_init(2*d, params.K, 1E-2);
+    gm1 = gm_init(2*d, params.Ng, 1E-2);
     [gm1,P_event(irun),ess_event(irun),n_iter_event(irun)] = cross_entropy(qoi, postfun, params.Imax, gm1, params.em_iter, params.Nsamples, params.rho);
     P_event(irun) = P_event(irun) / Z_post(irun)
     ttimes_event(irun) = toc;
