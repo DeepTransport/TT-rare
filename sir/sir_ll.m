@@ -12,7 +12,7 @@ x = reshape(x, [], 3*d, size(beta,3));
 x = x(:, 2+(0:d-1)*3, :);
 x = reshape(x, [], size(beta,3));
 
-lF = -sum((x - data).^2, 1)/(2*sigma_n^2);
+lF = -sum((x - data).^2, 1)/(2*sigma_n);
 lF = lF(:);
 
 end

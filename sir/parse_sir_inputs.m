@@ -15,7 +15,7 @@ end
 if (~isfield(params, 'sigma_n'))
     params.sigma_n = input('Standard deviation of the observation noise sigma_n = ? (default 1): ');
     if (isempty(params.sigma_n))
-        params.sigma_n = 1; % Noise std
+        params.sigma_n = 1; % Noise variance
     end
 end
 
