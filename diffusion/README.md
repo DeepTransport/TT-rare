@@ -14,7 +14,7 @@ The files `test_diffusion_*.m` run benchmarks of the corresponding algorithms:
 
 Each script will ask interactively (or take from *varargin*) the following parameters (case sensitive).
 #### PDE/Prior parameters (all tests)
- * *sigma* Variance of the affine diffusion coefficient expansion (or of **log** of the coefficient for log-uniform and log-normal fields)
+ * *sigma* Variance of the **log** of the diffusion coefficient
  * *corr_length* Correlation length of the expansion
  * *nu* Decay rate
  * *tol_kle* Relative tolerance for the KLE eigenvalue truncation
