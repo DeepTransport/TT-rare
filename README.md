@@ -11,11 +11,11 @@ It should be sufficient to just run `install` script in Matlab. This will check 
 
 All files for running experiments start with a `test_` prefix. You may click on each item to open an individual directory or file.
 
- * [`sir/`](https://github.com/dolgov/TT-IRT/tree/master/matlab/examples/rare_events/sir)   Compartmental Susceptible-Infectious-Removed ODE model
+ * [`sir/`](https://github.com/DeepTransport/TT-rare/tree/main/sir)   Compartmental Susceptible-Infectious-Removed ODE model
    - `test_sir_chain.m`        DIRT experiments with the chain topology of the compartments
    - `test_sir_austria.m`      DIRT experiments with the Austrian road topology of the compartments
    - `test_sir_CE.m`           Cross Entropy experiments with the chain topology of the compartments
- * [`diffusion/`](https://github.com/dolgov/TT-IRT/tree/master/matlab/examples/rare_events/diffusion)  Diffusion model of the contaminant transport in groundwater
+ * [`diffusion/`](https://github.com/DeepTransport/TT-rare/tree/main/diffusion)  Diffusion model of the contaminant transport in groundwater
    - `test_diffusion_rare_dirt.m`  DIRT experiments with the diffusion particle tracer
    - `test_diffusion_rare_CE.m`  Cross Entropy experiments with the diffusion particle tracer
 
@@ -32,6 +32,10 @@ Default parameters (corresponding to those in the paper) can be selected by ente
 
 Each test will print some statistical data (expected values, standard deviations, CPU times and so on).
 Moreover, it will create all the variables in the main Matlab workspace, so they can be accessed afterwards.
+
+### Cross Entropy method
+
+The paper compares the DIRT method with the Cross Entropy method on certain examples. See [`CrossEntropy/`](https://github.com/DeepTransport/TT-rare/tree/main/CrossEntropy) for the implementation of the latter.
 
 ### Further docs
 

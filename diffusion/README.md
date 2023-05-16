@@ -8,7 +8,7 @@ This example benchmarks DIRT on sampling rare events of a tracer particle follow
 
 ### Running the experiments
 
-The files `test_sir_*.m` run benchmarks of the corresponding algorithms:
+The files `test_diffusion_*.m` run benchmarks of the corresponding algorithms:
    - `test_diffusion_rare_dirt.m`  DIRT experiments with the diffusion particle tracer
    - `test_diffusion_rare_CE.m`  Cross Entropy experiments with the diffusion particle tracer
 
@@ -23,7 +23,7 @@ Each script will ask interactively (or take from *varargin*) the following param
  * *sigma_n* Variance of the observation noise
  * *m0* Number of observation points in each variable (total number of observations is m0*m0)
  * *y0* Synthetic truth value of the random variables. Special values are `'b'` indicating a high-contrast barrier inside the domain, and `'c'`, indicating aa high-contrast channel facilitating fast flow of the particle.
- * *log2N* Base-2 logarithm of the number of samples produced in MCMC
+ * *Nsamples* Number of samples used for estimating the normalising constant and probability
  * *thres* Escape time threshold defining the event
  * *gamma* Smoothing parameter (width coefficient in the sigmoid approximation of the indicator function of the event)
  * *runs* Number of runs (replicas) of the experiment
