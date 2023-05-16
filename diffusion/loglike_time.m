@@ -8,13 +8,13 @@ u = u.';  % size N x n^2
 
 [t,xexit,len] = escape_time_vec(a, u);
 
-f1 = log(1+exp((t-tmin)*beta0/gamma));
+f1 = log(1+exp((t-tmin)*beta0*gamma));
 if (beta0==0)
     f1(:) = 0;
 end
 f1(isinf(f1)) = 0;
-f2 = log(1+exp((t-tmin)*beta/gamma));
-if (gamma==0)
+f2 = log(1+exp((t-tmin)*beta*gamma));
+if isinf(gamma)
     f2 = -log(double(t<tmin));
 end
 f2(isinf(f2)) = +inf;

@@ -1,13 +1,14 @@
 % DIRT Diffusion rare event sampling test
 function test_diffusion_rare_dirt(varargin)
-% Check for and download TT-Toolbox
+% Check for and download TT-IRT
 mydir = fileparts(mfilename('fullpath'));
 try
     check_ttirt;
 catch
-    cd(mydir); cd('..'); cd('..'); cd('..'); cd('utils'); check_ttirt;
+    warning('TT-IRT is not found. Running install from the root folder TT-rare...');
+    cd('..');
+    install;
 end
-check_tt;
 cd(mydir);
 
 % Parse parameters or ask a user for them
@@ -115,14 +116,14 @@ P_event = zeros(params.runs, 1);
 for irun=1:params.runs
     %% Sample Posterior
     tic;
-    IRTstruct = tt_dirt_approx(ys, lpfun, params.beta, 'testsamples', 1e3, ...
-                               'nswp', 1, 'y0', ~isinf(params.sigma_n)*params.rpi + isinf(params.sigma_n), ...
-                               'kickrank', 0, 'boundary', true, 'reference', 'n3', ...
-                               'trunctol', 0, 'interpolation', 's', 'IRTdenom', false);
+    IRT = tt_dirt_approx(ys, lpfun, params.beta, 'testsamples', 1e3, ...
+                         'nswp', 1, 'y0', ~isinf(params.sigma_n)*params.rpi + isinf(params.sigma_n), ...
+                         'kickrank', 0, 'boundary', true, 'reference', 'n3', ...
+                         'trunctol', 0, 'interpolation', 's', 'IRTdenom', false);
                            
-    q = randref(IRTstruct.reference, 2^params.log2N, L);
+    q = randref(IRT.reference, params.Nsamples, L);
                            
-    [z,lFapp,lFex] = tt_dirt_sample(IRTstruct, q, @(x)lpfun(x,0,1));
+    [z,lFapp,lFex] = tt_dirt_sample(IRT, q, @(x)lpfun(x,0,1));
     ttimes_post(irun) = toc;
     
     Z_post(irun) = mean(exp(lFex-lFapp))
@@ -133,17 +134,17 @@ for irun=1:params.runs
     tau_post(irun) = statsiact(z2)
     ess_post(irun) = essinv(lFex,lFapp)
     hell_post(irun) = hellinger(lFex,lFapp)
-    evalcnt_post(irun) = sum(IRTstruct.evalcnt - 1e3);
+    evalcnt_post(irun) = sum(IRT.evalcnt - 1e3);
     
     
     
     %% Rare event approximation
     tic;
-    [IRTstruct2] = tt_dirt_approx(ys, lpfun_rare, params.beta, 'testsamples', 1e3, ...
-                                   'nswp', 1, 'y0', params.rpi, 'kickrank', 0, 'boundary', true, ...
-                                   'reference', 'n3', 'interpolation', 's');
+    [IRT2] = tt_dirt_approx(ys, lpfun_rare, params.beta, 'testsamples', 1e3, ...
+                            'nswp', 1, 'y0', params.rpi, 'kickrank', 0, 'boundary', true, ...
+                            'reference', 'n3', 'interpolation', 's');
                                                               
-    [z2,lFapp2,lFex2] = tt_dirt_sample(IRTstruct2, q, @(x)lpfun_rare(x,0,1));
+    [z2,lFapp2,lFex2] = tt_dirt_sample(IRT2, q, @(x)lpfun_rare(x,0,1));
     ttimes_event(irun) = toc;
     
     [z3,lFex3,lFapp3] = mcmc_prune(z2,lFex2,lFapp2);
@@ -158,7 +159,7 @@ for irun=1:params.runs
     tau_event(irun) = statsiact(z3)
     ess_event(irun) = essinv(lFex2,lFapp2)
     hell_event(irun) = hellinger(lFex2,lFapp2)
-    evalcnt_event(irun) = sum(IRTstruct2.evalcnt - 1e3);
+    evalcnt_event(irun) = sum(IRT2.evalcnt - 1e3);
     
     P_event(irun) = mean(exp(lFex2 - lFapp2)) / Z_post(irun)    
 end % irun

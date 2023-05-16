@@ -32,7 +32,7 @@ end
 
 % Here the inverse problem starts
 if (~isfield(params, 'sigma_n'))
-    params.sigma_n = input('Noise variance sigma_n = ? (default 1e-2): ');
+    params.sigma_n = input('Noise variance sigma_n = ? (default 1e-2, inf for prior inference): ');
     if (isempty(params.sigma_n))
         params.sigma_n = 1e-2;
     end
@@ -50,13 +50,12 @@ if (~isfield(params, 'y0'))
     end
 end
 
-if (~isfield(params, 'log2N'))
-    params.log2N = input('log2(number of samples in the chain) log2N = ? (default 13): ');
-    if (isempty(params.log2N))
-        params.log2N = 13;
+if (~isfield(params, 'Nsamples'))
+    params.Nsamples = input('Number of samples Nsamples = ? (default 10000): ');
+    if (isempty(params.Nsamples))
+        params.Nsamples = 10000;
     end
 end
-
 
 if (~isfield(params, 'thres'))
     params.thres = input('Threshold time thres defining the event t<thres = ? (default 0.15): ');
@@ -66,9 +65,9 @@ if (~isfield(params, 'thres'))
 end
 
 if (~isfield(params, 'gamma'))
-    params.gamma = input('Sigmoid width coefficient gamma = ? (default thres/100): ');
+    params.gamma = input('Sigmoid width coefficient gamma = ? (default 100/thres): ');
     if (isempty(params.gamma))
-        params.gamma = params.thres/100;
+        params.gamma = 100/params.thres;
     end
 end
 
