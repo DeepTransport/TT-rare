@@ -90,24 +90,26 @@ for irun=1:params.runs
     gm0 = gm_init(2*d, params.Ng, 1E-2);
     [gm0,Z_post(irun),ess_post(irun),n_iter_post(irun)] = cross_entropy(@(u)ones(1,size(u,2)), postfun, 0, gm0, params.em_iter, params.Nsamples, params.rho);
     ttimes_post(irun) = toc;
+    ess_post(irun) = 1/ess_post(irun); % Make it N/ESS
 
-    % Step 1: EM approximation for the event probability
+    % Step 2: EM approximation for the event probability
     tic;
     gm1 = gm_init(2*d, params.Ng, 1E-2);
     [gm1,P_event(irun),ess_event(irun),n_iter_event(irun)] = cross_entropy(qoi, postfun, params.Imax, gm1, params.em_iter, params.Nsamples, params.rho);
     P_event(irun) = P_event(irun) / Z_post(irun)
     ttimes_event(irun) = toc;
+    ess_event(irun) = 1/ess_event(irun); % Make it N/ESS
 end
 
 % Print some statsy information
 fprintf('Cross Entropy SIR completed. Some average values:\n');
 fprintf('\tCPU time of posterior CE: %g\n', mean(ttimes_post));
 fprintf('\tNumber of iterations in posterior CE: %g\n', mean(n_iter_post));
-fprintf('\tESS/N for posterior sampling: %g\n', mean(ess_post));
+fprintf('\tN/ESS for posterior sampling: %g\n', mean(ess_post));
 fprintf('\n');
 fprintf('\tCPU time of event CE: %g\n', mean(ttimes_event));
 fprintf('\tNumber of iterations in event CE: %g\n', mean(n_iter_event));
-fprintf('\tESS/N for event sampling: %g\n', mean(ess_event));
+fprintf('\tN/ESS for event sampling: %g\n', mean(ess_event));
 fprintf('\n');
 fprintf('P[I>Imax]: %g\n', mean(P_event));
 

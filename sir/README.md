@@ -2,40 +2,35 @@
 Deep Inverse Rosenblatt Transports (DIRT) + MCMC sampling using Tensor Train (TT) approximation for rare event simulation. This folder implements examples from the paper [T. Cui, S. Dolgov, R. Scheichl, Deep importance sampling using tensor trains with application to a priori and a posteriori rare events](https://arxiv.org/abs/2209.01941).
 
 
-## Rare event sampling in diffusion flow
+## Rare event sampling in SIR model
 
-This example benchmarks DIRT on sampling rare events of a tracer particle following a diffusion flow and escaping the domain faster than a chosen minimal time threshold `thres`. This model is described in Section 6 of the paper.
+This example benchmarks DIRT on sampling rare events of the maximal number of infected individuals in a compartmental SIR model exceeding a threshold `Imax`. This model is described in Section 5 of the paper.
 
 ### Running the experiments
 
-The files `test_sir_*.m` run benchmarks of the corresponding algorithms:
-   - `test_diffusion_rare_dirt.m`  DIRT experiments with the diffusion particle tracer
-   - `test_diffusion_rare_CE.m`  Cross Entropy experiments with the diffusion particle tracer
+The files `test_sir_*.m` run benchmarks of the corresponding algorithms and topologies of the compartments:
+   - `test_sir_chain.m`        DIRT experiments with the chain topology of the compartments
+   - `test_sir_austria.m`      DIRT experiments with the Austrian road topology of the compartments
+   - `test_sir_CE.m`           Cross Entropy experiments with the chain topology of the compartments
 
 Each script will ask interactively (or take from *varargin*) the following parameters (case sensitive).
-#### PDE/Prior parameters (all tests)
- * *sigma* Variance of the affine diffusion coefficient expansion (or of **log** of the coefficient for log-uniform and log-normal fields)
- * *corr_length* Correlation length of the expansion
- * *nu* Decay rate
- * *tol_kle* Relative tolerance for the KLE eigenvalue truncation
+#### ODE/Prior parameters (all tests)
+ * *K* Number of compartments
 
 #### Inverse problem parameters (all tests)
  * *sigma_n* Variance of the observation noise
- * *m0* Number of observation points in each variable (total number of observations is m0*m0)
- * *y0* Synthetic truth value of the random variables. Special values are `'b'` indicating a high-contrast barrier inside the domain, and `'c'`, indicating aa high-contrast channel facilitating fast flow of the particle.
- * *log2N* Base-2 logarithm of the number of samples produced in MCMC
- * *thres* Escape time threshold defining the event
- * *gamma* Smoothing parameter (width coefficient in the sigmoid approximation of the indicator function of the event)
+ * *Imax* Threshold for the number of infected defining the event
+ * *gammaev* Smoothing parameter (width coefficient in the sigmoid approximation of the indicator function of the event)
+ * *Nsamples* Number of samples used for estimating the normalising constant and probability
  * *runs* Number of runs (replicas) of the experiment
 
-#### DIRT approximation parameters (`test_diffusion_rare_dirt` only)
+#### DIRT approximation parameters (`test_sir_chain` and `test_sir_austria` only)
 
  * *npi* Number of discretization points in each random variable in the ratio functions on each level of DIRT
  * *rpi* TT rank of each DIRT ratio function (fixed-rank TT decompositions are used)
  * *beta* A vector of tempering powers. Should be in increasing order, and the last value should be 1.
- * *pp* Power of the prior tempering, so the actual tempering coefficient in front of the log-prior is beta^pp
 
-#### Cross Entropy approximation parameters (`test_diffusion_rare_CE` only)
+#### Cross Entropy approximation parameters (`test_sir_CE` only)
 
  * *Ng* Number of Gaussians constituting the mixture density fitted with cross entropy
  * *em_iter* Maximal number of iterations
@@ -61,16 +56,16 @@ Some of the interesting variables are:
  * *ess_event* N/ESS of the event biasing function
  * *tau_event* IACT of the Metropolised chain sampling the event (DIRT only)
  * *hell_event* Hellinger-distance error of the event indicator approximation (DIRT only)
- * *P_event* Probability of the event t<thres
+ * *P_event* Probability of the event I>Imax
 
 Each of these variables is a vector of size *runs* x 1, so statistics over experiments can be computed. Each script will also print average values.
 
+
 ### Function files
 
- * `parse_diffusion_inputs.m`    A function for requesting/extracting model parameters
- * `build_kle_eig.m`             Discretization of the diffusion equation
- * `diffusion_QoI.m`             Solution of the diffusion equation
- * `loglike_time.m`              Log-biasing function of the event
- * `escape_time_vec.m`           Computes the particle escape time
- * `flux_interpolate_vec.m`      Computes the flux (interpolated using piecewise linear basis used for solving the PDE)
+ * `parse_sir_inputs.m`    A function for requesting/extracting model parameters
+ * `sir_rhs.m`             Right hand side of the SIR ODE
+ * `sir_ll.m`              Log-likelihood of SIR (since the prior is uniform, this is also unnormalised log-posterior)
+ * `ll_logsigmoid.m`       Log-biasing function of the event
+ * `InfectedFun.m`         Computes the number of infected individuals for Cross Entropy
 
